@@ -129,7 +129,7 @@ public class Value<T> {
     init(_ value: T) { self.value = value }
 }
 
-public class Keychain {
+@objc public class Keychain {
     public var itemClass: ItemClass {
         return options.itemClass
     }
@@ -351,12 +351,12 @@ public class Keychain {
     
     public func set(value: String, key: String) -> NSError? {
         if let data = value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-            return set(data, key: key)
+            return setData(data, key: key)
         }
         return conversionError(message: "failed to convert string to data")
     }
     
-    public func set(value: NSData, key: String) -> NSError? {
+    public func setData(value: NSData, key: String) -> NSError? {
         var query = options.query()
         
         query[kSecAttrAccount as! String] = key
@@ -382,7 +382,7 @@ public class Keychain {
                     if error != nil {
                         return error
                     } else {
-                        return set(value, key: key)
+                        return setData(value, key: key)
                     }
                 } else {
                     status = SecItemUpdate(query, attributes)
@@ -469,33 +469,33 @@ public class Keychain {
         }
     }
 
-    public subscript(string key: String) -> String? {
-        get {
-            return get(key)
-        }
-
-        set {
-            if let value = newValue {
-                set(value, key: key)
-            } else {
-                remove(key)
-            }
-        }
-    }
-
-    public subscript(data key: String) -> NSData? {
-        get {
-            return getData(key)
-        }
-
-        set {
-            if let value = newValue {
-                set(value, key: key)
-            } else {
-                remove(key)
-            }
-        }
-    }
+//    public subscript(string key: String) -> String? {
+//        get {
+//            return get(key)
+//        }
+//
+//        set {
+//            if let value = newValue {
+//                set(value, key: key)
+//            } else {
+//                remove(key)
+//            }
+//        }
+//    }
+//
+//    public subscript(data key: String) -> NSData? {
+//        get {
+//            return getData(key)
+//        }
+//
+//        set {
+//            if let value = newValue {
+//                set(value, key: key)
+//            } else {
+//                remove(key)
+//            }
+//        }
+//    }
     
     // MARK:
     
