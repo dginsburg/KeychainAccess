@@ -129,7 +129,7 @@ public class Value<T> {
     init(_ value: T) { self.value = value }
 }
 
-@objc public class Keychain {
+@objc public class Keychain : NSObject {
     public var itemClass: ItemClass {
         return options.itemClass
     }
@@ -191,7 +191,7 @@ public class Value<T> {
     
     // MARK:
     
-    public convenience init() {
+    public convenience override init() {
         var options = Options()
         if let bundleIdentifier = NSBundle.mainBundle().bundleIdentifier {
             options.service = bundleIdentifier
@@ -221,8 +221,8 @@ public class Value<T> {
         self.init(options)
     }
     
-    public convenience init(server: String, protocolType: ProtocolType) {
-        self.init(server: NSURL(string: server)!, protocolType: protocolType)
+    public convenience init(server: String) {
+        self.init(server: NSURL(string: server)!, protocolType: .HTTPS)
     }
     
     public convenience init(server: String, protocolType: ProtocolType, authenticationType: AuthenticationType) {
@@ -244,6 +244,7 @@ public class Value<T> {
     
     private init(_ opts: Options) {
         options = opts
+        super.init();
     }
     
     // MARK:
@@ -829,7 +830,7 @@ struct Options {
 }
 
 extension Keychain : Printable, DebugPrintable {
-    public var description: String {
+    public override var description: String {
         let items = allItems()
         if items.isEmpty {
             return "[]"
@@ -843,7 +844,7 @@ extension Keychain : Printable, DebugPrintable {
         return description
     }
     
-    public var debugDescription: String {
+    public override var debugDescription: String {
         return "\(items())"
     }
 }
